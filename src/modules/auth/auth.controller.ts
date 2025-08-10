@@ -113,6 +113,17 @@ const verifyOtp = catchAsync(async (req, res) => {
   })
 });
 
+const resendOtp = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const result = await authServices.resendOtp(email);
+  res.status(200).json({
+    success: true,
+    message: 'OTP resent successfully',
+    body: result,
+  });
+});
+
+
 const authController = {
   logIn,
   logOut,
@@ -123,5 +134,6 @@ const authController = {
   collectProfileData,
   sendOtp,
   verifyOtp,
+  resendOtp,
 };
 export default authController;

@@ -75,13 +75,11 @@ const uploadOrChangeImg = catchAsync(async (req, res) => {
   if (!user_id || !imgFile) {
     throw new Error('User ID and image file are required.');
   }
-
   // Ensure `idConverter` returns only the ObjectId
   const userIdConverted = idConverter(user_id);
   if (!(userIdConverted instanceof Types.ObjectId)) {
     throw new Error('User ID conversion failed');
   }
-
   // Call the service function to handle the upload
   const result = await userServices.uploadOrChangeImg(
     userIdConverted,

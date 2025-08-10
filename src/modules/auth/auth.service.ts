@@ -44,6 +44,12 @@ const logIn = async (
     throw new Error('No user found with this email');
   }
 
+  // 🚫 Block login if OTP not verified (only for email/password login)
+  if (!user.otpVerified) {
+    console.log(user);
+    throw new Error('Please verify your OTP before logging in.');
+  }
+
   // Deny login for blocked/deleted users for normal email login
   if ((user.isBlocked || user.isDeleted) && method === 'email_Pass') {
     throw new Error('This user is blocked or deleted');
@@ -378,10 +384,11 @@ const sendOtp = async (email: string) => {
   return { success: true, message: 'OTP sent successfully' };
 };
 
-
 const verifyOtp = async (email: string, otp: string) => {
   // include otp fields (they're select:false by default)
-  const user = await UserModel.findOne({ email }).select('+otp +otpExpires +otpAttempts +otpVerified');
+  const user = await UserModel.findOne({ email }).select(
+    '+otp +otpExpires +otpAttempts +otpVerified',
+  );
   if (!user) throw new Error('User not found with this email');
 
   if (!user.otp || !user.otpExpires) {
@@ -412,7 +419,9 @@ const verifyOtp = async (email: string, otp: string) => {
       user.otpExpires = undefined as any;
       user.otpAttempts = 0;
       await user.save();
-      throw new Error('Maximum OTP attempts reached. Please request a new OTP.');
+      throw new Error(
+        'Maximum OTP attempts reached. Please request a new OTP.',
+      );
     }
 
     throw new Error('Invalid OTP');
@@ -428,6 +437,64 @@ const verifyOtp = async (email: string, otp: string) => {
   return { success: true, message: 'OTP verified successfully' };
 };
 
+const resendOtp = async (email: string) => {
+  const user = await UserModel.findOne({ email });
+  if (!user) throw new Error('User not found with this email');
+  if (user.isDeleted)
+    throw new Error('This user is deleted. This function is not available.');
+
+  // Optional: prevent too frequent resends
+  const now = new Date();
+  if (user.otpExpires && now < new Date(user.otpExpires)) {
+    const remainingSecs = Math.ceil(
+      (new Date(user.otpExpires).getTime() - now.getTime()) / 1000,
+    );
+    if (remainingSecs > Number(config.otp_expiry_minutes) * 60 - 60) {
+      throw new Error('Please wait before requesting another OTP.');
+    }
+  }
+
+  // Generate new OTP
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+  const saltRounds = Number(config.bcrypt_salt) || 10;
+  const hashedOtp = await bcrypt.hash(otp, saltRounds);
+
+  // Reset fields
+  const expiryMinutes = Number(config.otp_expiry_minutes) || 10;
+  user.otp = hashedOtp;
+  user.otpExpires = new Date(Date.now() + expiryMinutes * 60 * 1000);
+  user.otpAttempts = 0;
+  user.otpVerified = false;
+
+  await user.save();
+
+  // Send via email
+  const html = `
+    <p>Your new verification code is <strong>${otp}</strong>.</p>
+    <p>This code expires in ${expiryMinutes} minutes.</p>
+  `;
+
+  const emailResponse = await sendEmail(
+    user.email,
+    'Your new verification code',
+    html,
+  );
+
+  if (!emailResponse.success) {
+    user.otp = undefined as any;
+    user.otpExpires = undefined as any;
+    user.otpAttempts = 0;
+    await user.save();
+
+    return {
+      success: false,
+      message: 'Failed to resend OTP',
+      error: emailResponse.error,
+    };
+  }
+
+  return { success: true, message: 'OTP resent successfully' };
+};
 
 const authServices = {
   logIn,
@@ -439,5 +506,6 @@ const authServices = {
   forgetPassword,
   resetPassword,
   collectProfileData,
+  resendOtp,
 };
 export default authServices;

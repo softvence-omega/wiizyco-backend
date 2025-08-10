@@ -25,7 +25,7 @@ const UserSchema = new Schema<TUser>(
     otp: { type: String, select: false },
     otpExpires: { type: Date, select: false },
     otpAttempts: { type: Number, default: 0, select: false },
-    otpVerified: { type: Boolean, default: false, select: false },
+    otpVerified: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
