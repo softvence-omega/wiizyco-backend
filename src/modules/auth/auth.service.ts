@@ -328,10 +328,113 @@ const collectProfileData = async (id: string) => {
   return result;
 };
 
+const sendOtp = async (email: string) => {
+  const user = await UserModel.findOne({ email });
+  if (!user) throw new Error('User not found with this email');
+  if (user.isDeleted)
+    throw new Error('This user is deleted. This function is not available.');
+
+  // generate 4-digit OTP
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
+  const saltRounds = Number(config.bcrypt_salt) || 10;
+  const hashedOtp = await bcrypt.hash(otp, saltRounds);
+
+  // save hashed otp, expiry and reset attempts
+  const expiryMinutes = Number(config.otp_expiry_minutes) || 10;
+  user.otp = hashedOtp;
+  user.otpExpires = new Date(Date.now() + expiryMinutes * 60 * 1000);
+  user.otpAttempts = 0;
+  user.otpVerified = false;
+
+  await user.save();
+
+  // craft email (you already have sendEmail util)
+  const html = `
+    <p>Your verification code is <strong>${otp}</strong>.</p>
+    <p>This code expires in ${expiryMinutes} minutes.</p>
+  `;
+
+  const emailResponse = await sendEmail(
+    user.email,
+    'Your verification code',
+    html,
+  );
+
+  if (!emailResponse.success) {
+    // optionally clear OTP if email send fails
+    user.otp = undefined as any;
+    user.otpExpires = undefined as any;
+    user.otpAttempts = 0;
+    await user.save();
+
+    return {
+      success: false,
+      message: 'Failed to send OTP',
+      error: emailResponse.error,
+    };
+  }
+
+  return { success: true, message: 'OTP sent successfully' };
+};
+
+
+const verifyOtp = async (email: string, otp: string) => {
+  // include otp fields (they're select:false by default)
+  const user = await UserModel.findOne({ email }).select('+otp +otpExpires +otpAttempts +otpVerified');
+  if (!user) throw new Error('User not found with this email');
+
+  if (!user.otp || !user.otpExpires) {
+    throw new Error('No OTP found. Request a new one.');
+  }
+
+  // check expiry
+  if (new Date() > new Date(user.otpExpires)) {
+    // clear expired OTP
+    user.otp = undefined as any;
+    user.otpExpires = undefined as any;
+    user.otpAttempts = 0;
+    await user.save();
+    throw new Error('OTP expired. Please request a new one.');
+  }
+
+  // compare
+  const isMatch = await bcrypt.compare(otp, user.otp);
+
+  if (!isMatch) {
+    user.otpAttempts = (user.otpAttempts ?? 0) + 1;
+    await user.save();
+
+    const maxAttempts = Number(config.otp_max_attempts) || 5;
+    if (user.otpAttempts >= maxAttempts) {
+      // clear OTP after too many attempts (you might choose to block user temporarily instead)
+      user.otp = undefined as any;
+      user.otpExpires = undefined as any;
+      user.otpAttempts = 0;
+      await user.save();
+      throw new Error('Maximum OTP attempts reached. Please request a new OTP.');
+    }
+
+    throw new Error('Invalid OTP');
+  }
+
+  // success: mark verified and clear sensitive fields
+  user.otpVerified = true;
+  user.otp = undefined as any;
+  user.otpExpires = undefined as any;
+  user.otpAttempts = 0;
+  await user.save();
+
+  return { success: true, message: 'OTP verified successfully' };
+};
+
+
 const authServices = {
   logIn,
   logOut,
   changePassword,
+  sendOtp,
+  verifyOtp,
   refreshToken,
   forgetPassword,
   resetPassword,

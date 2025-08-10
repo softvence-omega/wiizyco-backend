@@ -1,10 +1,9 @@
 import catchAsync from '../../util/catchAsync';
 import authServices from './auth.service';
 
-
 const logIn = catchAsync(async (req, res) => {
-  const { email, password,method } = req.body;
-  const result = await authServices.logIn(email, password,method);
+  const { email, password, method } = req.body;
+  const result = await authServices.logIn(email, password, method);
   const { approvalToken, refreshToken, updatedUser } = result;
 
   res.status(200).json({
@@ -56,7 +55,6 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 const forgetPassword = catchAsync(async (req, res) => {
-
   const email = req.body?.email;
   const result = await authServices.forgetPassword(email);
   res.status(200).json({
@@ -64,7 +62,6 @@ const forgetPassword = catchAsync(async (req, res) => {
     message: 'reset password token genarated check your email',
     body: result,
   });
-
 });
 
 const resetPassword = catchAsync(async (req, res) => {
@@ -86,13 +83,34 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const collectProfileData = catchAsync(async (req, res) => {
-  const user = req.user 
+  const user = req.user;
   const result = await authServices.collectProfileData(user.id);
   res.status(200).json({
     success: true,
     message: 'password changed',
     body: result,
   });
+});
+
+const sendOtp = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const result = await authServices.sendOtp(email);
+  res.status(200).json({
+    success: true,
+    message: 'OTP sent successfully',
+    body: result,
+  });
+});
+
+const verifyOtp = catchAsync(async (req, res) => {
+  const { email, otp } = req.body;
+  const result = await authServices.verifyOtp(email, otp);
+
+  res.status(200).json({
+    success: true,
+    message: result.message,
+    body: result,
+  })
 });
 
 const authController = {
@@ -102,6 +120,8 @@ const authController = {
   refreshToken,
   forgetPassword,
   resetPassword,
-  collectProfileData
+  collectProfileData,
+  sendOtp,
+  verifyOtp,
 };
 export default authController;

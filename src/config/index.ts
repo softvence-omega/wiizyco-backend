@@ -21,6 +21,8 @@ const config={
     cloudinary_name:process.env.CLOUDINARY_NAME,
     cloudinary_api_key:process.env.CLOUDINARY_API_KEY,
     cloudinary_api_secret:process.env.CLOUDINARY_API_SECRET,
+    otp_expiry_minutes:process.env.OTP_EXPIRY_MINUTES as string,
+    otp_max_attempts:process.env.OTP_MAX_ATTEMPTS as string,
 }
 
 export default config;

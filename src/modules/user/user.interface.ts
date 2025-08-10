@@ -15,6 +15,10 @@ export type TUser = {
   isLoggedIn?: boolean;
   loggedOutTime?: Date;
   passwordChangeTime?: Date;
+  otp?: string; // hashed, select: false in schema
+  otpExpires?: Date;
+  otpAttempts?: number;
+  otpVerified?: boolean;
 };
 
 export type TProfile = {
@@ -25,9 +29,9 @@ export type TProfile = {
   img?: string;
   age?: number;
   gender?: 'male' | 'female';
-  hight?: number;
-  weight?: number;
-  residenceArea?: string;
+  emailNotifications?: boolean;
+  bio?: string;
+  linkedInLink?: string;
 
   user_id: Types.ObjectId;
 

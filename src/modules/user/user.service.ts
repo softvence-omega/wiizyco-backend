@@ -3,9 +3,19 @@ import { TProfile, TUser } from './user.interface';
 import { ProfileModel, UserModel } from './user.model';
 import { uploadImgToCloudinary } from '../../util/uploadImgToCloudinary';
 
-const createUser = async (payload: Partial<TUser>, method?: string) => {
+const createUser = async (
+  payload: Partial<TUser>,
+  method?: string | number,
+) => {
   if (!payload.agreedToTerms) {
     throw new Error('You must agree to the terms and conditions to register.');
+  }
+
+  if (typeof payload.age !== 'number') {
+    throw new Error('Age is required and must be a number.');
+  }
+  if (payload.age < 18) {
+    throw new Error('You must be at least 18 years old to register.');
   }
 
   const existingUser = await UserModel.findOne({ email: payload.email }).select(
