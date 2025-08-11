@@ -31,6 +31,10 @@ marketplaceRoutes.get(
 
 marketplaceRoutes.get('/projects/:id', marketplaceController.getProjectById);
 
-
+marketplaceRoutes.patch(
+  '/projects/:id',
+  auth(userRole.admin),
+  marketplaceController.updateProject,
+);
 
 export default marketplaceRoutes;
