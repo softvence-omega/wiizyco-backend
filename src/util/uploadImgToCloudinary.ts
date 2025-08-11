@@ -9,7 +9,11 @@ const deleteFile = async (filePath: string) => {
   try {
     await fs.unlink(filePath);
   } catch (err) {
-    console.error(`Error deleting file: ${err.message}`);
+    if (err instanceof Error) {
+      console.error(`Error deleting file: ${err.message}`);
+    } else {
+      console.error(`Error deleting file: ${String(err)}`);
+    }
   }
 };
 
@@ -24,7 +28,7 @@ export const uploadToCloudinary = async (filePath: string, folder: string) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
       folder,
-      resource_type: "auto", // allows images, pdfs, docs
+      resource_type: "auto", // allows images, pdf, docs
     });
     await deleteFile(filePath);
     return result.secure_url;

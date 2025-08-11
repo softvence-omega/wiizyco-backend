@@ -68,25 +68,28 @@ const selfDestruct = catchAsync(async (req, res) => {
 });
 
 const uploadOrChangeImg = catchAsync(async (req, res) => {
-  const actionType = req.query.actionType as string; // Fixed typo in `actionType`
+  const actionType = req.query.actionType as string;
   const user_id = req.user.id;
-  const imgFile = req.file;
+
+  // FIX: Use req.files, not req.file
+  const imgFile = req.files && (req.files as any).images
+    ? (req.files as any).images[0]
+    : null;
 
   if (!user_id || !imgFile) {
     throw new Error('User ID and image file are required.');
   }
-  // Ensure `idConverter` returns only the ObjectId
+
   const userIdConverted = idConverter(user_id);
   if (!(userIdConverted instanceof Types.ObjectId)) {
     throw new Error('User ID conversion failed');
   }
-  // Call the service function to handle the upload
+
   const result = await userServices.uploadOrChangeImg(
     userIdConverted,
     imgFile as Express.Multer.File,
   );
 
-  // Send response
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -94,6 +97,7 @@ const uploadOrChangeImg = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 
 const getProfile = catchAsync(async (req, res) => {
   const user_id = req.user.id;

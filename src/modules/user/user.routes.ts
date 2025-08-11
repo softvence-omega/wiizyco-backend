@@ -22,7 +22,9 @@ userRoutes.delete(
 userRoutes.post(
   '/uploadOrChangeImg',
   auth(userRole.admin, userRole.user),
-  upload.single('files'),
+  upload.fields([
+    { name: 'images', maxCount: 1 },
+  ]),
   userController.uploadOrChangeImg,
 );
 

@@ -1,7 +1,7 @@
 import mongoose, { ClientSession, Types } from 'mongoose';
 import { TProfile, TUser } from './user.interface';
 import { ProfileModel, UserModel } from './user.model';
-import { uploadImgToCloudinary } from '../../util/uploadImgToCloudinary';
+import { uploadToCloudinary } from '../../util/uploadImgToCloudinary';
 
 const createUser = async (
   payload: Partial<TUser>,
@@ -134,19 +134,18 @@ const uploadOrChangeImg = async (
     throw new Error('User ID and image file are required.');
   }
 
-  // Upload new image to Cloudinary
-  const result = await uploadImgToCloudinary(imgFile.filename, imgFile.path);
+  const result = await uploadToCloudinary(imgFile.path, 'profile/images');
 
-  console.log(result);
+  // console.log(result);
 
-  if (!result.secure_url) {
+  if (!result) {
     throw new Error('Image upload failed.');
   }
 
   // Update user profile with new image URL
   const updatedUserProfile = await ProfileModel.findOneAndUpdate(
     { user_id }, // Corrected query (find by user_id, not _id)
-    { img: result.secure_url },
+    { img: result },
     { new: true },
   );
 
