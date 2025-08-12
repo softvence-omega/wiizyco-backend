@@ -60,10 +60,27 @@ const updateProject = catchAsync(async (req, res) => {
   });
 });
 
+const deleteProject = catchAsync(async (req, res) => {
+  const projectId =
+    typeof req.params.id === 'string' ? idConverter(req.params.id) : req.params.id;
+
+  if (!projectId) {
+    throw new Error('Project ID conversion failed');
+  }
+
+  const deletedProject = await marketplaceServices.deleteProject(projectId);
+
+  res.status(200).json({
+    message: 'Project deleted successfully',
+    data: deletedProject,
+  });
+});
+
 const marketplaceController = {
   submitProject,
   getAllProjects,
   getMyProjects,
+  deleteProject,
   updateProject,
   getProjectById,
 };

@@ -15,7 +15,7 @@ const ProjectSchema = new Schema<TProject & Document>(
     ndaRequired: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     documents: {
-      images: { type: [String], default: [], required: false },
+      images: { type: [String], default: [], required: true },
       docs: { type: [String], default: [] },
     },
     contactEmail: { type: String, required: false },

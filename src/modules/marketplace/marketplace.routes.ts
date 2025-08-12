@@ -37,4 +37,10 @@ marketplaceRoutes.patch(
   marketplaceController.updateProject,
 );
 
+marketplaceRoutes.delete(
+  '/projects/:id',
+  auth(userRole.admin),
+  marketplaceController.deleteProject
+);
+
 export default marketplaceRoutes;
