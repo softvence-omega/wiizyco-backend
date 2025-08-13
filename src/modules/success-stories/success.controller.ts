@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import catchAsync from '../../util/catchAsync';
 import idConverter from '../../util/idConverter';
 import successStoryServices from './success.service';
+import sendResponse from '../../util/sendResponse';
 
 const createSuccessStory = catchAsync(async (req, res) => {
   const userIdConverted = idConverter(req.user.id);
@@ -14,7 +15,9 @@ const createSuccessStory = catchAsync(async (req, res) => {
     req.body,
     req.files,
   );
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Success story created successfully',
     data: result,
   });
@@ -22,7 +25,9 @@ const createSuccessStory = catchAsync(async (req, res) => {
 
 const getAllSuccessStories = catchAsync(async (req, res) => {
   const result = await successStoryServices.getAllSuccessStories();
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Success stories retrieved successfully',
     data: result,
   });
@@ -31,7 +36,9 @@ const getAllSuccessStories = catchAsync(async (req, res) => {
 const getSuccessStoryById = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await successStoryServices.getSuccessStoryById(id);
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Success story retrieved successfully',
     data: result,
   });
@@ -45,7 +52,9 @@ const getMySuccessStories = catchAsync(async (req, res) => {
     throw new Error('User ID not found');
   }
   const result = await successStoryServices.getMySuccessStories(user_id);
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'My success stories retrieved successfully',
     data: result,
   });
@@ -53,8 +62,14 @@ const getMySuccessStories = catchAsync(async (req, res) => {
 
 const updateSuccessStory = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const result = await successStoryServices.updateSuccessStory(id, req.body, req.files);
-  res.status(200).json({
+  const result = await successStoryServices.updateSuccessStory(
+    id,
+    req.body,
+    req.files,
+  );
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Success story updated successfully',
     data: result,
   });
@@ -62,9 +77,12 @@ const updateSuccessStory = catchAsync(async (req, res) => {
 
 const deleteSuccessStory = catchAsync(async (req, res) => {
   const { id } = req.params;
-  await successStoryServices.deleteSuccessStory(id);
-  res.status(200).json({
+  const result = await successStoryServices.deleteSuccessStory(id);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Success story deleted successfully',
+    data: result,
   });
 });
 

@@ -4,10 +4,17 @@ import idConverter from '../../util/idConverter';
 import marketplaceServices from './marketplace.service';
 
 const submitProject = catchAsync(async (req, res) => {
-  const user_id = typeof req.user.id === 'string' ? req.user.id : req.user.id.toString();
-  const result = await marketplaceServices.submitProject(user_id, req.body, req.files);
+  const user_id =
+    typeof req.user.id === 'string' ? req.user.id : req.user.id.toString();
+  const result = await marketplaceServices.submitProject(
+    user_id,
+    req.body,
+    req.files,
+  );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Project created successfully',
     data: result,
   });
@@ -16,17 +23,22 @@ const submitProject = catchAsync(async (req, res) => {
 const getAllProjects = catchAsync(async (req, res) => {
   const projects = await marketplaceServices.getAllProjects();
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Projects retrieved successfully',
     data: projects,
   });
 });
 
 const getMyProjects = catchAsync(async (req, res) => {
-  const user_id = typeof req.user.id === 'string' ? req.user.id : req.user.id.toString();
+  const user_id =
+    typeof req.user.id === 'string' ? req.user.id : req.user.id.toString();
   const projects = await marketplaceServices.getMyProjects(user_id);
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Projects retrieved successfully',
     data: projects,
   });
@@ -36,7 +48,9 @@ const getProjectById = catchAsync(async (req, res) => {
   const projectId = req.params.id;
   const project = await marketplaceServices.getProjectById(projectId);
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Project retrieved successfully',
     data: project,
   });
@@ -44,17 +58,23 @@ const getProjectById = catchAsync(async (req, res) => {
 
 const updateProject = catchAsync(async (req, res) => {
   const projectId =
-    typeof req.params.id === 'string' ? idConverter(req.params.id) : req.params.id;
+    typeof req.params.id === 'string'
+      ? idConverter(req.params.id)
+      : req.params.id;
   const payload = req.body;
-  console.log(payload);
 
   if (!projectId) {
     throw new Error('Project ID conversion failed');
   }
 
-  const updatedProject = await marketplaceServices.updateProject(projectId, payload);
+  const updatedProject = await marketplaceServices.updateProject(
+    projectId,
+    payload,
+  );
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Project updated successfully',
     data: updatedProject,
   });
@@ -62,7 +82,9 @@ const updateProject = catchAsync(async (req, res) => {
 
 const deleteProject = catchAsync(async (req, res) => {
   const projectId =
-    typeof req.params.id === 'string' ? idConverter(req.params.id) : req.params.id;
+    typeof req.params.id === 'string'
+      ? idConverter(req.params.id)
+      : req.params.id;
 
   if (!projectId) {
     throw new Error('Project ID conversion failed');
@@ -70,7 +92,9 @@ const deleteProject = catchAsync(async (req, res) => {
 
   const deletedProject = await marketplaceServices.deleteProject(projectId);
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
     message: 'Project deleted successfully',
     data: deletedProject,
   });
