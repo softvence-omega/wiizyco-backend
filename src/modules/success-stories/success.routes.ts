@@ -11,6 +11,7 @@ successRoutes.post(
   auth(userRole.user, userRole.admin),
   upload.fields([
     { name: 'images', maxCount: 3 },
+    { name: 'docs', maxCount: 3 },
   ]),
   successStoryController.createSuccessStory,
 );
@@ -33,7 +34,7 @@ successRoutes.patch(
   successStoryController.updateSuccessStory,
 );
 successRoutes.delete(
-  '/:id',
+  '/delete/:id',
   auth(userRole.user, userRole.admin),
   successStoryController.deleteSuccessStory,
 );

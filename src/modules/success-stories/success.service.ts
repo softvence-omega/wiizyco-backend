@@ -35,9 +35,9 @@ const createSuccessStory = async (
       images: imageUrls,
       docs: docUrls,
     };
+    payload.author = user_id;
 
     const newSuccessStory = await SuccessStoryModel.create({
-      user_id,
       ...payload,
     });
     return newSuccessStory;
