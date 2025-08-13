@@ -4,6 +4,7 @@ import userRoutes from '../modules/user/user.routes';
 import marketplaceRoutes from '../modules/marketplace/marketplace.routes';
 import blogRoutes from '../modules/blog/blog.routes';
 import successRoutes from '../modules/success-stories/success.routes';
+import contactRoutes from '../modules/contact/contact.routes';
 
 const Routes = express.Router();
 // Array of module routes
@@ -27,7 +28,11 @@ const moduleRouts = [
   {
     path: '/success-stories',
     router: successRoutes,
-  }
+  },
+  {
+    path: '/contact',
+    router: contactRoutes,
+  },
 ];
 
 moduleRouts.forEach(({ path, router }) => {

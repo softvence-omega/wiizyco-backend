@@ -23,13 +23,18 @@ successRoutes.get(
   successStoryController.getSuccessStoryById,
 );
 
-successRoutes.get('/mySuccessStories', auth(userRole.user, userRole.admin), successStoryController.getMySuccessStories);
+successRoutes.get(
+  '/mySuccessStories',
+  auth(userRole.user, userRole.admin),
+  successStoryController.getMySuccessStories,
+);
 
 successRoutes.patch(
   '/update/:id',
   auth(userRole.user, userRole.admin),
   upload.fields([
     { name: 'images', maxCount: 3 },
+    { name: 'docs', maxCount: 3 },
   ]),
   successStoryController.updateSuccessStory,
 );

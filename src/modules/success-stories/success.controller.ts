@@ -40,7 +40,6 @@ const getSuccessStoryById = catchAsync(async (req, res) => {
 const getMySuccessStories = catchAsync(async (req, res) => {
   const user_id =
     typeof req.user.id === 'string' ? req.user.id : req.user.id.toString();
-  console.log(req);
 
   if (!user_id) {
     throw new Error('User ID not found');
