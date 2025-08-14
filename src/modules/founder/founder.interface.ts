@@ -1,4 +1,4 @@
-import { Document, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 export type FounderCategory =
   | 'mentorship'
@@ -8,7 +8,7 @@ export type FounderCategory =
 
 export type FounderStatus = 'pending' | 'approved' | 'rejected' | 'banned';
 
-export interface TFounder extends Document {
+export type TFounder = {
   user_id: Types.ObjectId;
   name: string;
   email: string;
@@ -17,4 +17,4 @@ export interface TFounder extends Document {
   category: FounderCategory[]; // array of categories
   status: FounderStatus;
   aboutReviveHub: string;
-}
+};

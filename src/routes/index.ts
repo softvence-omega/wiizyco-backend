@@ -6,6 +6,8 @@ import blogRoutes from '../modules/blog/blog.routes';
 import successRoutes from '../modules/success-stories/success.routes';
 import contactRoutes from '../modules/contact/contact.routes';
 import founderRoutes from '../modules/founder/founder.routes';
+import pitchNightRoutes from '../modules/pitch-night/pitchNight.routes';
+import pitchApplicationRoutes from '../modules/pitch-applications/pitchApply.routes';
 
 const Routes = express.Router();
 // Array of module routes
@@ -35,9 +37,17 @@ const moduleRouts = [
     router: contactRoutes,
   },
   {
-    path:"/founders",
-    router: founderRoutes
-  }
+    path: '/founders',
+    router: founderRoutes,
+  },
+  {
+    path: '/pitch-night',
+    router: pitchNightRoutes,
+  },
+  {
+    path: '/pitch-apply',
+    router: pitchApplicationRoutes,
+  },
 ];
 
 moduleRouts.forEach(({ path, router }) => {

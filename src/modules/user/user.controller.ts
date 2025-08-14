@@ -39,7 +39,6 @@ const updateProfileData = catchAsync(async (req, res) => {
 const deleteSingleUser = catchAsync(async (req, res) => {
   const user_id = req.query.user_id as string;
   const userIdConverted = idConverter(user_id);
-  console.log(user_id, userIdConverted);
   if (!userIdConverted) {
     throw new Error('user id conversiopn failed');
   }

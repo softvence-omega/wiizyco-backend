@@ -1,10 +1,8 @@
-import { Document } from "mongoose";
-
 export type ContactCategory = 'Bug' | 'General' | 'Media' | 'Partnership';
 
-export interface TContact extends Document {
+export type TContact = {
   name: string;
   email: string;
   category: ContactCategory;
   message: string;
-}
+};
