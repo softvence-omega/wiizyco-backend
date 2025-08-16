@@ -8,6 +8,7 @@ import contactRoutes from '../modules/contact/contact.routes';
 import founderRoutes from '../modules/founder/founder.routes';
 import pitchNightRoutes from '../modules/pitch-night/pitchNight.routes';
 import pitchApplicationRoutes from '../modules/pitch-applications/pitchApply.routes';
+import pitchGuestRoutes from '../modules/pitch-guest/pitchGuest.routes';
 
 const Routes = express.Router();
 // Array of module routes
@@ -47,6 +48,10 @@ const moduleRouts = [
   {
     path: '/pitch-apply',
     router: pitchApplicationRoutes,
+  },
+  {
+    path: '/pitch-guest',
+    router: pitchGuestRoutes,
   },
 ];
 

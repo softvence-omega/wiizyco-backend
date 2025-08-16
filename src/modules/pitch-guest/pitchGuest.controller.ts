@@ -3,18 +3,11 @@ import sendResponse from '../../util/sendResponse';
 import pitchGuestServices from './pitchGuest.service';
 
 const createPitchGuest = catchAsync(async (req, res) => {
-  const { eventId, guestName, designation, shortDescription, guestRole } =
-    req.body;
-  const guestImage = req.file?.path || 'hi';
-
-  const newGuest = await pitchGuestServices.createPitchGuest({
-    eventId,
-    guestName,
-    designation,
-    shortDescription,
-    guestRole,
-    guestImage,
-  });
+  const payload = req.body;
+  const newGuest = await pitchGuestServices.createPitchGuest(
+    payload,
+    req.files,
+  );
 
   sendResponse(res, {
     statusCode: 201,

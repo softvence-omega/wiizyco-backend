@@ -1,9 +1,25 @@
+import { uploadToCloudinary } from '../../util/uploadImgToCloudinary';
 import { TPitchGuest } from './pitchGuest.interface';
 import PitchGuest from './pitchGuest.model';
 
-const createPitchGuest = async (guestData: TPitchGuest) => {
+const createPitchGuest = async (
+  payload: TPitchGuest,
+  files: Express.Multer.File | any,
+) => {
   try {
-    const newGuest = await PitchGuest.create(guestData);
+    let img = '';
+    if (files?.images && files.images[0]?.path) {
+      img = await uploadToCloudinary(
+        files.images[0].path,
+        'pitch-guest-images',
+      );
+    }
+
+    const newGuest = await PitchGuest.create({
+      ...payload,
+      guestImage: img,
+    });
+
     return newGuest;
   } catch (error) {
     throw error;
@@ -15,7 +31,10 @@ const getAllPitchGuests = async (eventId?: string) => {
     const query: any = {};
     if (eventId) query.eventId = eventId;
 
-    const guests = await PitchGuest.find(query).populate('eventId', 'title date');
+    const guests = await PitchGuest.find(query).populate(
+      'eventId',
+      'title date',
+    );
     return guests;
   } catch (error) {
     throw error;
@@ -24,7 +43,10 @@ const getAllPitchGuests = async (eventId?: string) => {
 
 const getPitchGuestById = async (guestId: string) => {
   try {
-    const guest = await PitchGuest.findById(guestId).populate('eventId', 'title date');
+    const guest = await PitchGuest.findById(guestId).populate(
+      'eventId',
+      'title date',
+    );
     if (!guest) throw new Error('Guest not found');
     return guest;
   } catch (error) {
@@ -34,13 +56,13 @@ const getPitchGuestById = async (guestId: string) => {
 
 const updatePitchGuest = async (
   guestId: string,
-  updateData: Partial<TPitchGuest>
+  updateData: Partial<TPitchGuest>,
 ) => {
   try {
     const updatedGuest = await PitchGuest.findByIdAndUpdate(
       guestId,
       updateData,
-      { new: true }
+      { new: true },
     ).populate('eventId', 'title date');
     if (!updatedGuest) throw new Error('Guest not found');
     return updatedGuest;

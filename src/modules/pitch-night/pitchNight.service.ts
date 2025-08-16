@@ -47,7 +47,6 @@ const getPitchNightById = async (pitchNightId: string) => {
     const pitchNight = await PitchNight.findById(pitchNightId)
       .populate('guestDetails')
       .populate('applicants');
-
     if (!pitchNight) {
       throw new Error('Pitch Night not found');
     }

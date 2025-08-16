@@ -9,7 +9,7 @@ const pitchNightSchema = new Schema<TPitchNightEvent>({
   applicationDeadline: { type: Date, required: true },
   eventDescription: { type: String, required: true },
   eventBanner: { type: String, required: true },
-  guestDetails: [{ type: Schema.Types.ObjectId, ref: 'Guest' }],
+  guestDetails: [{ type: Schema.Types.ObjectId, ref: 'PitchGuest' }],
   applicants: [{ type: Schema.Types.ObjectId, ref: 'PitchApplication' }],
 });
 
