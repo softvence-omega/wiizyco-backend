@@ -1,4 +1,3 @@
-
 import { TPitchGuest } from './pitchGuest.interface';
 import PitchGuest from './pitchGuest.model';
 
@@ -11,9 +10,12 @@ const createPitchGuest = async (guestData: TPitchGuest) => {
   }
 };
 
-const getAllPitchGuests = async () => {
+const getAllPitchGuests = async (eventId?: string) => {
   try {
-    const guests = await PitchGuest.find();
+    const query: any = {};
+    if (eventId) query.eventId = eventId;
+
+    const guests = await PitchGuest.find(query).populate('eventId', 'title date');
     return guests;
   } catch (error) {
     throw error;
@@ -22,7 +24,7 @@ const getAllPitchGuests = async () => {
 
 const getPitchGuestById = async (guestId: string) => {
   try {
-    const guest = await PitchGuest.findById(guestId);
+    const guest = await PitchGuest.findById(guestId).populate('eventId', 'title date');
     if (!guest) throw new Error('Guest not found');
     return guest;
   } catch (error) {
@@ -30,9 +32,16 @@ const getPitchGuestById = async (guestId: string) => {
   }
 };
 
-const updatePitchGuest = async (guestId: string, updateData: Partial<TPitchGuest>) => {
+const updatePitchGuest = async (
+  guestId: string,
+  updateData: Partial<TPitchGuest>
+) => {
   try {
-    const updatedGuest = await PitchGuest.findByIdAndUpdate(guestId, updateData, { new: true });
+    const updatedGuest = await PitchGuest.findByIdAndUpdate(
+      guestId,
+      updateData,
+      { new: true }
+    ).populate('eventId', 'title date');
     if (!updatedGuest) throw new Error('Guest not found');
     return updatedGuest;
   } catch (error) {

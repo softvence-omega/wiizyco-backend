@@ -3,10 +3,12 @@ import sendResponse from '../../util/sendResponse';
 import pitchGuestServices from './pitchGuest.service';
 
 const createPitchGuest = catchAsync(async (req, res) => {
-  const { guestName, designation, shortDescription, guestRole } = req.body;
+  const { eventId, guestName, designation, shortDescription, guestRole } =
+    req.body;
   const guestImage = req.file?.path || 'hi';
 
   const newGuest = await pitchGuestServices.createPitchGuest({
+    eventId,
     guestName,
     designation,
     shortDescription,
