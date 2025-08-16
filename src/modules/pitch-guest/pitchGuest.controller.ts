@@ -12,7 +12,7 @@ const createPitchGuest = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: 201,
     success: true,
-    message: 'Pitch Guest created successfully',
+    message: 'Pitch Guest created successfully!!',
     data: newGuest,
   });
 });
