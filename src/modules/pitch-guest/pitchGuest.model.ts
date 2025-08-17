@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { TPitchGuest } from './pitchGuest.interface';
 
 const pitchGuestSchema = new Schema<TPitchGuest>({
-  eventId: { type: Schema.Types.ObjectId, ref: 'PitchNight', required: true },
+  eventId: { type: Schema.Types.ObjectId, ref: "PitchNight", required: true },
   guestName: { type: String, required: true },
   designation: { type: String, required: true },
   shortDescription: { type: String, required: true },

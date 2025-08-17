@@ -33,9 +33,7 @@ const createPitchNight = async (
 
 const getAllPitchNight = async () => {
   try {
-    const pitchNights = await PitchNight.find()
-      .populate('guestDetails')
-      .populate('applicants');
+    const pitchNights = await PitchNight.find();
     return pitchNights;
   } catch (error) {
     throw error;
@@ -45,8 +43,8 @@ const getAllPitchNight = async () => {
 const getPitchNightById = async (pitchNightId: string) => {
   try {
     const pitchNight = await PitchNight.findById(pitchNightId)
-      .populate('guestDetails')
-      .populate('applicants');
+      .populate('guests')
+      .populate('applications');
     if (!pitchNight) {
       throw new Error('Pitch Night not found');
     }

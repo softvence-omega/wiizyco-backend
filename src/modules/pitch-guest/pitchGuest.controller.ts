@@ -43,11 +43,11 @@ const getPitchGuestById = catchAsync(async (req, res) => {
 const updatePitchGuest = catchAsync(async (req, res) => {
   const guestId = req.params.id;
   const updateData = req.body;
-  if (req.file) updateData.guestImage = req.file.path;
 
   const updatedGuest = await pitchGuestServices.updatePitchGuest(
     guestId,
     updateData,
+    req.file,
   );
 
   sendResponse(res, {

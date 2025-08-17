@@ -57,13 +57,23 @@ const getPitchGuestById = async (guestId: string) => {
 const updatePitchGuest = async (
   guestId: string,
   updateData: Partial<TPitchGuest>,
+  file?: Express.Multer.File,
 ) => {
   try {
+    if (file) {
+      const uploadedImg = await uploadToCloudinary(
+        file.path,
+        'pitch-guest-images',
+      );
+      updateData.guestImage = uploadedImg;
+    }
+
     const updatedGuest = await PitchGuest.findByIdAndUpdate(
       guestId,
       updateData,
       { new: true },
-    ).populate('eventId', 'title date');
+    )
+
     if (!updatedGuest) throw new Error('Guest not found');
     return updatedGuest;
   } catch (error) {

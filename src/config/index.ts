@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import Stripe from 'stripe';
 dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 const config = {
@@ -24,5 +25,7 @@ const config = {
   otp_expiry_minutes: process.env.OTP_EXPIRY_MINUTES as string,
   otp_max_attempts: process.env.OTP_MAX_ATTEMPTS as string,
 };
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export default config;
+export { stripe };

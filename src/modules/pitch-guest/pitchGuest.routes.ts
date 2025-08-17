@@ -24,7 +24,7 @@ pitchGuestRoutes.get('/single/:id', pitchGuestController.getPitchGuestById);
 pitchGuestRoutes.patch(
   '/update/:id',
   auth(userRole.admin),
-  upload.single('guestImage'),
+  upload.fields([{ name: 'images', maxCount: 1 }]),
   pitchGuestController.updatePitchGuest,
 );
 
