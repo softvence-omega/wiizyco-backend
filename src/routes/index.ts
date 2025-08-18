@@ -12,6 +12,7 @@ import pitchGuestRoutes from '../modules/pitch-guest/pitchGuest.routes';
 import planRoutes from '../modules/plan/plan.route';
 import paymentRoutes from '../modules/payment/payment.routes';
 import userSubscriptionRoutes from '../modules/userSubscription/userSubscription.route';
+import messageRoutes from '../modules/messages/messages.routes';
 
 const Routes = express.Router();
 // Array of module routes
@@ -67,6 +68,10 @@ const moduleRouts = [
   {
     path: '/user-subscription',
     router: userSubscriptionRoutes,
+  },
+  {
+    path: '/messages',
+    router: messageRoutes,
   },
 ];
 
