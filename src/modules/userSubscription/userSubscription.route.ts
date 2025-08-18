@@ -1,7 +1,8 @@
 import express from 'express';
-import { userRole } from '../../constents';
+import { userRole } from '../../constants';
 import auth from '../../middleware/auth';
 import userSubscriptionController from './userSubscription.controller';
+
 
 const userSubscriptionRoutes = express.Router();
 

@@ -1,22 +1,21 @@
-import catchAsync from "../../util/catchAsync";
-import userSubscriptionService from "./userSubscription.service";
+import catchAsync from '../../util/catchAsync';
+import userSubscriptionService from './userSubscription.service';
 
 const getUserById = catchAsync(async (req, res) => {
-    const { userId } = req.params;
+  const { userId } = req.params;
 
-    const result = await userSubscriptionService.getUserById(userId);
-    res.status(200).json({
-        success: true,
-        message: "Subscription retrieved successfully",
-        data: {
-            subscription: result
-        }
-    });
-})
-
+  const result = await userSubscriptionService.getUserById(userId);
+  res.status(200).json({
+    success: true,
+    message: 'Subscription retrieved successfully',
+    data: {
+      subscription: result,
+    },
+  });
+});
 
 const userSubscriptionController = {
-    getUserById
+  getUserById,
 };
 
 export default userSubscriptionController;

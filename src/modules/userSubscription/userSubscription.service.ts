@@ -1,4 +1,5 @@
-import idConverter from "../../util/idConvirter";
+
+import idConverter from "../../util/idConverter";
 import { UserSubscriptionModel } from "./userSubscription.model";
 
 const getUserById = async (userId: string) => {

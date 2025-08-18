@@ -10,6 +10,8 @@ import pitchNightRoutes from '../modules/pitch-night/pitchNight.routes';
 import pitchApplicationRoutes from '../modules/pitch-applications/pitchApply.routes';
 import pitchGuestRoutes from '../modules/pitch-guest/pitchGuest.routes';
 import planRoutes from '../modules/plan/plan.route';
+import paymentRoutes from '../modules/payment/payment.routes';
+import userSubscriptionRoutes from '../modules/userSubscription/userSubscription.route';
 
 const Routes = express.Router();
 // Array of module routes
@@ -54,9 +56,17 @@ const moduleRouts = [
     path: '/pitch-guest',
     router: pitchGuestRoutes,
   },
-    {
+  {
     path: '/plan',
     router: planRoutes,
+  },
+  {
+    path: '/payments',
+    router: paymentRoutes,
+  },
+  {
+    path: '/user-subscription',
+    router: userSubscriptionRoutes,
   },
 ];
 

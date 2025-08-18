@@ -20,8 +20,7 @@ const userSubscriptionSchema = new Schema<TUserSubscription>({
     enum: ["active", "canceled", "pending", "completed", "inactive"],
     default: "inactive"
   },
-  promoCodeId: { type: Schema.Types.ObjectId, ref: "PromoCode", default: null },
-
+ 
 }, { timestamps: true });
 
 export const UserSubscriptionModel = mongoose.model<TUserSubscription>(

@@ -17,6 +17,9 @@ const planSchema = new Schema<TPlan>({
     default: 'month',
   },
   description: { type: String, default: '' },
+
+  // ✅ Optional slot system
+  availableSlots: { type: Number, default: null },
 });
 
 export const PlanModel = mongoose.model<TPlan>('PlanCollection', planSchema);

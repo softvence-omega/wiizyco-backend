@@ -14,5 +14,4 @@ export type TUserSubscription = {
   startDate?: Date;
   endDate?: Date | null;
   status: "active" | "canceled" | "pending" | "completed" | "inactive" | "past_due";
-  promoCodeId?: mongoose.Types.ObjectId | null;
 };

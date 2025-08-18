@@ -1,9 +1,7 @@
-
-
 export type TPlan = {
   name: string;
   description?: string;
-  heading?:string;
+  heading?: string;
   price: number;
   stripePriceId?: string;
   services: string[];
@@ -12,4 +10,5 @@ export type TPlan = {
   subscription?: boolean;
   billingInterval?: 'week' | 'month' | 'year';
   oneTimePayment?: boolean;
+  availableSlots?: number;
 };
