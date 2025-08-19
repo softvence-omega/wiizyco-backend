@@ -3,7 +3,11 @@ import { TUserSubscription } from './userSubscription.interface';
 
 const userSubscriptionSchema = new Schema<TUserSubscription>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'UserCollection',
+      required: true,
+    },
     planId: { type: Schema.Types.ObjectId, ref: 'Plan', required: true },
     // Stripe info
     stripeCustomerId: { type: String },

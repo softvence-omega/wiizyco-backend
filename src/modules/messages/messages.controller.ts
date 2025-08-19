@@ -5,8 +5,6 @@ import messagesService from './messages.service';
 import { uploadToCloudinary } from '../../util/uploadImgToCloudinary';
 import { Types } from 'mongoose';
 
-// ... existing sendMessage & getConversation ...
-
 export const getUnreadCounts = catchAsync(
   async (req: Request, res: Response) => {
     const userId = req.user.id as string;
@@ -56,7 +54,7 @@ export const retractForEveryone = catchAsync(
 );
 
 // sending stays same but ensure encryption + file handled
-export const sendMessage = catchAsync(async (req: Request, res: Response) => {
+export const sendMessage = catchAsync(async (req, res) => {
   const { receiver, type, text, fileName } = req.body as {
     receiver: string;
     type: 'text' | 'emoji' | 'file';

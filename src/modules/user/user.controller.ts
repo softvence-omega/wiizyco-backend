@@ -40,7 +40,7 @@ const deleteSingleUser = catchAsync(async (req, res) => {
   const user_id = req.query.user_id as string;
   const userIdConverted = idConverter(user_id);
   if (!userIdConverted) {
-    throw new Error('user id conversiopn failed');
+    throw new Error('user id conversion failed');
   }
   const result = await userServices.deleteSingleUser(userIdConverted);
   sendResponse(res, {
@@ -71,9 +71,10 @@ const uploadOrChangeImg = catchAsync(async (req, res) => {
   const user_id = req.user.id;
 
   // FIX: Use req.files, not req.file
-  const imgFile = req.files && (req.files as any).images
-    ? (req.files as any).images[0]
-    : null;
+  const imgFile =
+    req.files && (req.files as any).images
+      ? (req.files as any).images[0]
+      : null;
 
   if (!user_id || !imgFile) {
     throw new Error('User ID and image file are required.');
@@ -96,7 +97,6 @@ const uploadOrChangeImg = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 const getProfile = catchAsync(async (req, res) => {
   const user_id = req.user.id;

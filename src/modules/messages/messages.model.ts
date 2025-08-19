@@ -6,13 +6,13 @@ const MessageSchema = new Schema<IMessage>(
   {
     sender: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'UserCollection',
       required: true,
       index: true,
     },
     receiver: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'UserCollection',
       required: true,
       index: true,
     },

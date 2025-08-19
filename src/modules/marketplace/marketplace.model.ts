@@ -5,7 +5,7 @@ import { TProject } from './marketplace.interface';
 
 const ProjectSchema = new Schema<TProject & Document>(
   {
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'UserCollection', required: true },
     title: { type: String, required: false },
     category: { type: String, required: false },
     description: { type: String, required: false },

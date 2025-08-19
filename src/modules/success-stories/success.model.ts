@@ -13,7 +13,7 @@ const SuccessStorySchema = new Schema<TSuccessStory>(
       images: { type: [String], default: [] },
       docs: { type: [String], default: [] },
     },
-    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    author: { type: Schema.Types.ObjectId, ref: 'UserCollection', required: true },
   },
   {
     timestamps: true,

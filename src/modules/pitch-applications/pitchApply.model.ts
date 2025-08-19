@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { TPitchApplication } from './pitchApply.interface';
 
 const pitchApplicationSchema = new Schema<TPitchApplication>({
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'UserCollection', required: true },
   eventId: { type: Schema.Types.ObjectId, ref: 'PitchNight', required: true },
   projectTitle: { type: String, required: true },
   projectDescription: { type: String, required: true },

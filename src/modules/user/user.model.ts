@@ -48,7 +48,7 @@ const ProfileSchema = new Schema<TProfile>(
     emailNotifications: { type: Boolean, default: true },
     bio: { type: String, default: null },
 
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'UserCollection', required: true },
 
     isDeleted: { type: Boolean, default: false },
   },
