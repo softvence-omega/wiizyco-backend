@@ -114,6 +114,25 @@ const getProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateUser = catchAsync(async (req, res) => {
+  const { userId, role } = req.body;
+
+  const converted_user_id = idConverter(userId);
+  if (!converted_user_id) {
+    throw Error('id conversion failed');
+  }
+
+  // Pass object, not string
+  const result = await userServices.updateUser(converted_user_id, { role });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Role updated',
+    data: result,
+  });
+});
+
 const userController = {
   createUser,
   getAllUsers,
@@ -122,6 +141,7 @@ const userController = {
   selfDestruct,
   uploadOrChangeImg,
   getProfile,
+  updateUser,
 };
 
 export default userController;

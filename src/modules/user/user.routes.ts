@@ -22,9 +22,7 @@ userRoutes.delete(
 userRoutes.post(
   '/uploadOrChangeImg',
   auth(userRole.admin, userRole.user),
-  upload.fields([
-    { name: 'images', maxCount: 1 },
-  ]),
+  upload.fields([{ name: 'images', maxCount: 1 }]),
   userController.uploadOrChangeImg,
 );
 
@@ -36,7 +34,7 @@ userRoutes.get(
 
 // admin routes
 userRoutes.get(
-  '/getAlluser',
+  '/getAllUser',
   auth(userRole.admin, userRole.user),
   userController.getAllUsers,
 );
@@ -44,6 +42,12 @@ userRoutes.delete(
   '/deleteSingleUser',
   auth(userRole.admin),
   userController.deleteSingleUser,
+);
+
+userRoutes.patch(
+  '/updateUser',
+  auth(userRole.admin),
+  userController.updateUser,
 );
 
 export default userRoutes;

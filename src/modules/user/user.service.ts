@@ -162,6 +162,19 @@ const getProfile = async (user_id: Types.ObjectId) => {
   return profile;
 };
 
+const updateUser = async (user_id: Types.ObjectId, payload: Partial<TUser>) => {
+  try {
+    const updatedProfile = await UserModel.findOneAndUpdate(
+      { _id: user_id },
+      { $set: payload },
+      { new: true },
+    );
+    return updatedProfile;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const userServices = {
   createUser,
   getAllUsers,
@@ -170,6 +183,7 @@ const userServices = {
   selfDestruct,
   uploadOrChangeImg,
   getProfile,
+  updateUser,
 };
 
 export default userServices;
